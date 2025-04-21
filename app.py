@@ -464,20 +464,32 @@ with gr.Blocks(title="TripoSG") as demo:
 
     demo.load(start_session)
     demo.unload(end_session)
+from pyngrok import ngrok
 
-import argparse
+def launch_app_with_ngrok(ngrok_key: str, port: int = 7820):
+    # ngrok の認証設定
+    ngrok.set_auth_token(ngrok_key)
 
-# 実行時引数のパーサー
-parser = argparse.ArgumentParser()
-parser.add_argument("--ngrok_key", type=str, required=False, help="ngrok token")
-args = parser.parse_args()
+    # トンネル開始
+    public_url = ngrok.connect(port, "http")
+    print("🌐 Public URL (ngrok):", public_url)
 
-# Gradio 起動
-demo.launch(
-    share=True,
-    server_name="0.0.0.0",
-    server_port=7820,
-    debug=True,
-    ngrok_token=args.ngrok_key  # ← ここで渡す
-)
+    # GradioのUI起動
+    demo.launch(
+        share=False,
+        server_name="0.0.0.0",
+        server_port=port,
+        debug=True
+    )
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ngrok_key", type=str, required=True, help="Your ngrok auth token")
+    parser.add_argument("--port", type=int, default=7820, help="Port to expose")
+    args = parser.parse_args()
+
+    launch_app_with_ngrok(args.ngrok_key, port=args.port)
+
 
