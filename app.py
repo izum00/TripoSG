@@ -465,4 +465,19 @@ with gr.Blocks(title="TripoSG") as demo:
     demo.load(start_session)
     demo.unload(end_session)
 
-demo.launch(share=True)
+import argparse
+
+# 実行時引数のパーサー
+parser = argparse.ArgumentParser()
+parser.add_argument("--ngrok_key", type=str, required=False, help="ngrok token")
+args = parser.parse_args()
+
+# Gradio 起動
+demo.launch(
+    share=True,
+    server_name="0.0.0.0",
+    server_port=7820,
+    debug=True,
+    ngrok_token=args.ngrok_key  # ← ここで渡す
+)
+
