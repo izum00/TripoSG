@@ -474,4 +474,3 @@ with gr.Blocks(title="TripoSG") as demo:
         debug=True
     )
 
-if __name__ == "__main__":
