@@ -468,9 +468,7 @@ with gr.Blocks(title="TripoSG") as demo:
 
     # GradioのUI起動
     demo.launch(
-        share=False,
-        server_name="0.0.0.0",
-        server_port=7860,
-        debug=True
+        debug=True,
+        share=True
     )
 
